@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
 
     // Check for configured external LLM providers
     const openaiKey = process.env.OPENAI_API_KEY;
-    const geminiKey = process.env.GEMINI_API_KEY;
     const groqKey = process.env.GROQ_API_KEY;
 
     if (openaiKey) {
@@ -144,7 +143,6 @@ export async function POST(req: NextRequest) {
     }
 
     // Built-in intelligent context-aware engine fallback
-    // Provides immediate, deterministic, accurate answers about Abhinav's projects, skills & background
     const userPrompt = latestMessage.content.toLowerCase();
     const reply = generateContextualReply(userPrompt);
 
@@ -160,7 +158,7 @@ export async function POST(req: NextRequest) {
       {
         role: "assistant",
         content:
-          "Systems nominal, but I experienced a momentary transmission anomaly. You can also explore Abhinav's projects directly in the Projects section or view his GitHub repositories at https://github.com/abhinavhq.",
+          "Systems nominal. You can review Abhinav's projects in the showcase section or view his GitHub repositories at https://github.com/abhinavhq.",
         provider: "fallback",
         timestamp: new Date().toISOString(),
       },
@@ -170,14 +168,27 @@ export async function POST(req: NextRequest) {
 }
 
 function generateContextualReply(prompt: string): string {
-  // Identity & Overview
+  // Graph Agent
   if (
-    prompt.includes("who is") ||
-    prompt.includes("tell me about abhinav") ||
-    prompt.includes("introduce") ||
-    prompt.includes("background")
+    prompt.includes("graph") ||
+    prompt.includes("fraud") ||
+    prompt.includes("kuzu") ||
+    prompt.includes("mcp") ||
+    prompt.includes("ring")
   ) {
-    return `**Abhinav Yadav** is a Computer Science Engineering student and systems builder based in **Bengaluru, India**.\n\nHe specializes in **Artificial Intelligence & Machine Learning**, **Autonomous Agentic Systems**, **Cybersecurity**, and **Full-Stack Development**. He is driven by first-principles engineering and exploring unconventional technical problems—from distributed agent orchestration to defensive network security tools.\n\nHis overarching ambition is to engineer transformative software on an international stage. You can inspect his open-source work at [github.com/abhinavhq](${PERSONAL_INFO.githubUrl}).`;
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "graph-agent")!;
+    return `### **Graph Agent — Financial Fraud Ring Detector**\n*${p.tagline}*\n\n- **Overview**: ${p.description}\n- **Architecture**: Employs an embedded **Kùzu Graph Database** paired with Model Context Protocol (**MCP**) tools and local **Ollama** LLMs to execute multi-hop graph traversals autonomously.\n- **Privacy**: 100% local execution ensuring zero financial data leaves the local boundary.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
+  }
+
+  // Pumpkin Search Engine
+  if (
+    prompt.includes("pumpkin") ||
+    prompt.includes("search engine") ||
+    prompt.includes("bm25") ||
+    prompt.includes("hybrid search")
+  ) {
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "pumpkin-search-engine")!;
+    return `### **Pumpkin — AI Search Engine from Scratch**\n*${p.tagline}*\n\n- **Overview**: ${p.description}\n- **First-Principles Design**: Built with **zero third-party search APIs**. It implements custom tokenization, inverted indexing, BM25 relevance scoring, dense vector similarity, and Reciprocal Rank Fusion (RRF) with local Ollama RAG synthesis.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
   // Multi-Agent OS
@@ -185,77 +196,70 @@ function generateContextualReply(prompt: string): string {
     prompt.includes("multi-agent") ||
     prompt.includes("multi agent") ||
     prompt.includes("orchestration") ||
-    prompt.includes("kernel")
+    prompt.includes("planner") ||
+    prompt.includes("coder")
   ) {
     const p = FEATURED_PROJECTS.find((proj) => proj.slug === "multi-agent-os")!;
-    return `### **Multi-Agent OS**\n*${p.tagline}*\n\n- **Overview**: ${p.description}\n- **Architecture**: Features a hierarchical supervisor-worker topology, asynchronous event-driven task scheduler, graph-based shared memory fabric, and sandboxed tool delegation with rollback mechanics.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n- **Status**: ${p.status}.\n\nInspect the source code: [${p.githubUrl}](${p.githubUrl})`;
+    return `### **Multi-Agent OS**\n*${p.tagline}*\n\n- **Overview**: Autonomous multi-agent AI framework where specialized agents—**Planner, Researcher, Coder, Tester, and Reporter**—collaborate to solve complex engineering tasks using local Ollama LLMs.\n- **Architecture**: Features an iterative verification gate where the Tester agent automatically feeds unit-test syntax errors back to the Coder agent before generating the final report.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
-  // Heimdall
+  // Nova Browser Agent
   if (
-    prompt.includes("heimdall") ||
-    prompt.includes("cybersecurity") ||
-    prompt.includes("security") ||
-    prompt.includes("vulnerability")
+    prompt.includes("nova") ||
+    prompt.includes("browser") ||
+    prompt.includes("playwright")
   ) {
-    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "heimdall-cybersecurity")!;
-    return `### **Heimdall Sentinel**\n*${p.tagline}*\n\n- **Purpose**: Automated defensive cybersecurity suite designed for high-throughput network asset discovery, TLS/SSL hygiene auditing, and real-time CVE threat correlation.\n- **Key Mechanics**: Combines asynchronous socket scanning with signature fingerprinting to map exposure surfaces with minimal false positives.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nExplore repository: [${p.githubUrl}](${p.githubUrl})`;
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "nova-automation")!;
+    return `### **Nova — Autonomous Browser Agent**\n*${p.tagline}*\n\n- **Capabilities**: Translates natural language goals into autonomous multi-step browser actions (research, job hunting, shopping, data scraping) via **Playwright** and local LLM planning.\n- **Key Innovation**: Prunes massive DOM trees into compact semantic accessibility graphs to fit within token limits with 96%+ workflow reliability.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
-  // Hospital Triage OpenEnv
+  // Vanta Fashion
   if (
-    prompt.includes("hospital") ||
-    prompt.includes("triage") ||
-    prompt.includes("openenv") ||
-    prompt.includes("reinforcement learning") ||
-    prompt.includes("gym")
+    prompt.includes("vanta") ||
+    prompt.includes("fashion") ||
+    prompt.includes("luxury") ||
+    prompt.includes("ecommerce")
   ) {
-    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "hospital-triage-openenv")!;
-    return `### **Hospital Triage OpenEnv**\n*${p.tagline}*\n\n- **Overview**: An OpenAI Gymnasium-compliant simulation platform modeling high-stress emergency medical triage under stochastic resource constraints.\n- **RL Architecture**: Formulates patient prioritization as an MDP, evaluating PPO and DQN policies against static heuristic baselines (like ESI).\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub repo: [${p.githubUrl}](${p.githubUrl})`;
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "vanta-fashion")!;
+    return `### **Vanta Fashion — Digital Luxury Platform**\n*${p.tagline}*\n\n- **Overview**: ${p.description}\n- **Live Deployment**: Hosted in production on Vercel at [vanta-fashion-two.vercel.app](https://vanta-fashion-two.vercel.app).\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
-  // Iris AI
+  // Joe AI Assistant
   if (
-    prompt.includes("iris") ||
-    prompt.includes("computer vision") ||
-    prompt.includes("multimodal") ||
-    prompt.includes("webcam")
-  ) {
-    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "iris-ai")!;
-    return `### **Iris AI Multimodal**\n*${p.tagline}*\n\n- **Innovation**: Bridges visual perception with conversational LLMs using edge keyframe filtering (SSIM delta heuristics), saving up to 78% in token costs compared to naive video streaming.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nExplore: [${p.githubUrl}](${p.githubUrl})`;
-  }
-
-  // Joi AI Companion
-  if (
-    prompt.includes("joi") ||
     prompt.includes("joe") ||
-    prompt.includes("companion") ||
-    prompt.includes("blade runner")
+    prompt.includes("voice") ||
+    prompt.includes("companion")
   ) {
-    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "joi-ai-assistant")!;
-    return `### **Joi AI Companion**\n*${p.tagline}*\n\n- **Concept**: Inspired by *Blade Runner 2049*, Joi is a desktop assistant featuring low-latency speech synthesis, persistent vector memory across sessions, and local OS automation hooks.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nExplore: [${p.githubUrl}](${p.githubUrl})`;
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "joe-ai-assistant")!;
+    return `### **Joe AI — Next-Gen Personal Assistant**\n*${p.tagline}*\n\n- **Overview**: Combines natural spoken voice interaction, long-term memory across sessions, and local desktop task automations.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
-  // Vantage Smart Stadium
-  if (
-    prompt.includes("vantage") ||
-    prompt.includes("stadium") ||
-    prompt.includes("crowd")
-  ) {
-    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "vantage-smart-stadium")!;
-    return `### **Vantage Smart Stadium**\n*${p.tagline}*\n\n- **Overview**: Computer vision and IoT analytics platform tracking venue crowd density, concession wait times, and bottleneck alerts using YOLO edge detection and Next.js spatial dashboards.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nExplore: [${p.githubUrl}](${p.githubUrl})`;
+  // Vantage
+  if (prompt.includes("vantage")) {
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "vantage-ai")!;
+    return `### **Vantage AI — Dual-Mode Assistant**\n*${p.tagline}*\n\n- **Design**: Dynamically pivots between 'Fan Mode' (conversational attendee companion) and 'Ops Mode' (event operations & queue analytics).\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
   // Evelyn Discord Bot
   if (prompt.includes("evelyn") || prompt.includes("discord")) {
     const p = FEATURED_PROJECTS.find((proj) => proj.slug === "evelyn-discord-bot")!;
-    return `### **Evelyn Discord Bot**\n*${p.tagline}*\n\n- **Features**: Modular asynchronous Discord bot serving developer communities with AI-assisted moderation, role governance, sandboxed code execution, and high uptime.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nExplore: [${p.githubUrl}](${p.githubUrl})`;
+    return `### **Evelyn Discord Bot**\n*${p.tagline}*\n\n- **Features**: Asynchronous Discord bot written in Python featuring economy, games, moderation, music streaming, and automated server utilities with 99.8% uptime.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
   }
 
-  // Nova
-  if (prompt.includes("nova") || prompt.includes("automation")) {
-    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "nova-automation")!;
-    return `### **Nova Automation**\n*${p.tagline}*\n\n- **Features**: Declarative browser automation and workflow orchestration framework with self-healing retry mechanics, Playwright integration, and credential vaulting.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nExplore: [${p.githubUrl}](${p.githubUrl})`;
+  // Hospital Triage
+  if (prompt.includes("hospital") || prompt.includes("triage") || prompt.includes("openenv")) {
+    const p = FEATURED_PROJECTS.find((proj) => proj.slug === "hospital-triage-openenv")!;
+    return `### **Hospital Triage OpenEnv**\n*${p.tagline}*\n\n- **Simulation**: Uses OpenEnv and local Ollama models to benchmark dynamic emergency triage decision-making under stochastic patient arrivals.\n- **Tech Stack**: ${p.techStack.join(", ")}.\n\nGitHub Repo: [${p.githubUrl}](${p.githubUrl})`;
+  }
+
+  // Identity & Overview
+  if (
+    prompt.includes("who is") ||
+    prompt.includes("tell me about abhinav") ||
+    prompt.includes("introduce") ||
+    prompt.includes("background")
+  ) {
+    return `**Abhinav Yadav** is a Computer Science Engineering student and AI systems builder based in **Bengaluru, India**.\n\nHe specializes in **Graph Reasoning (Kùzu / MCP)**, **Search Engine Architecture (BM25 & Hybrid RAG from scratch)**, **Autonomous Multi-Agent Swarms (Multi-Agent OS)**, **Browser Agents (Nova)**, and **Full-Stack Engineering (Next.js/TypeScript)**.\n\nHe builds unconventional, deeply technical systems from first principles. Inspect his active repositories at [github.com/abhinavhq](${PERSONAL_INFO.githubUrl}).`;
   }
 
   // Skills & Tech Stack
@@ -264,8 +268,7 @@ function generateContextualReply(prompt: string): string {
     prompt.includes("technolog") ||
     prompt.includes("stack") ||
     prompt.includes("languages") ||
-    prompt.includes("python") ||
-    prompt.includes("react")
+    prompt.includes("python")
   ) {
     const summary = SKILL_CATEGORIES.map(
       (c) =>
@@ -274,7 +277,7 @@ function generateContextualReply(prompt: string): string {
           .map((s) => s.name)
           .join(", ")}`
     ).join("\n- ");
-    return `Abhinav's technical toolkit spans across systems, AI, and modern web architectures:\n\n- ${summary}\n\nHe prioritizes **Python** for machine learning and agentic workflows, **TypeScript / Next.js** for full-stack engineering, and **C/C++** for core systems comprehension.`;
+    return `Abhinav's technical toolkit spans systems, AI, and modern web architectures:\n\n- ${summary}\n\nHe emphasizes **Python** for AI agents, graph reasoning, and search engineering, and **TypeScript / Next.js** for modern digital platforms.`;
   }
 
   // Collaboration / Hiring / Contact
@@ -283,22 +286,11 @@ function generateContextualReply(prompt: string): string {
     prompt.includes("hire") ||
     prompt.includes("contact") ||
     prompt.includes("reach") ||
-    prompt.includes("email") ||
-    prompt.includes("work with")
+    prompt.includes("email")
   ) {
-    return `### **Collaborating with Abhinav**\n\nAbhinav is open for ambitious research projects, high-impact software engineering roles, and technical collaborations.\n\n- **Location**: Bengaluru, India (Open to remote and international opportunities)\n- **Direct Email**: [${PERSONAL_INFO.email}](mailto:${PERSONAL_INFO.email})\n- **GitHub**: [github.com/abhinavhq](${PERSONAL_INFO.githubUrl})\n- **LinkedIn**: [${PERSONAL_INFO.linkedinUrl}](${PERSONAL_INFO.linkedinUrl})\n\nYou can also submit a direct message using the **Contact Section** on this website!`;
+    return `### **Collaborating with Abhinav**\n\nAbhinav is open for ambitious research projects, high-impact software engineering roles, and technical collaborations.\n\n- **Location**: Bengaluru, India (Open to remote and international roles)\n- **Direct Email**: [${PERSONAL_INFO.email}](mailto:${PERSONAL_INFO.email})\n- **GitHub**: [github.com/abhinavhq](${PERSONAL_INFO.githubUrl})\n- **LinkedIn**: [${PERSONAL_INFO.linkedinUrl}](${PERSONAL_INFO.linkedinUrl})\n\nYou can also submit a direct message using the **Contact Section** on this website!`;
   }
 
-  // Philosophy / Japanese aesthetic
-  if (
-    prompt.includes("philosophy") ||
-    prompt.includes("japanese") ||
-    prompt.includes("design") ||
-    prompt.includes("aesthetic")
-  ) {
-    return `Abhinav's engineering and design philosophies are deeply grounded in:\n\n1. **First-Principles Engineering (基本原理)** — Deconstruct problems to their core constraints.\n2. **Autonomous Intelligence (自律知能)** — Build systems that reason and orchestrate without fragile reliance on manual oversight.\n3. **Resilient Security Posture (堅牢防御)** — Security as an architectural foundation, not an afterthought.\n4. **Minimalist Craftsmanship (研ぎ澄まされた美学)** — Ruthless reduction of noise, inspired by Japanese minimalism and cyberpunk precision.`;
-  }
-
-  // General default response
-  return `I am **EON AI**, Abhinav Yadav's intelligent assistant.\n\nAbhinav is a Bengaluru-based Computer Science Engineering student and systems builder specializing in **Autonomous AI Agents**, **Cybersecurity (Heimdall)**, and **Full-Stack Development**.\n\nFeel free to ask me about:\n- His flagship projects like **Multi-Agent OS**, **Heimdall Sentinel**, or **Hospital Triage OpenEnv**\n- His technical skills and engineering architecture\n- How to collaborate or get in touch`;
+  // Default
+  return `I am **EON AI**, Abhinav Yadav's intelligent assistant.\n\nAbhinav builds from the ground up on GitHub:\n- **Graph Agent**: Multi-hop fraud ring detection with Kùzu and MCP\n- **Pumpkin**: Complete AI search engine with BM25 and hybrid RAG\n- **Multi-Agent OS**: Autonomous Planner/Coder/Tester swarms\n- **Nova**: Autonomous browser agent with Playwright\n- **Vanta Fashion**: Next.js luxury fashion platform live on Vercel\n\nWhat would you like to explore?`;
 }
