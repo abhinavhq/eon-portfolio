@@ -14,7 +14,7 @@ export const PERSONAL_INFO = {
   email: "abhinav@example.com",
   githubUsername: "abhinavhq",
   githubUrl: "https://github.com/abhinavhq",
-  linkedinUrl: "https://linkedin.com/in/abhinav-yadav",
+  linkedinUrl: "https://www.linkedin.com/in/abhinavhq", // Update with your exact LinkedIn username or handle
   twitterUrl: "https://x.com/abhinavhq",
   bio: `I am a Computer Science Engineering student based in Bengaluru, India, focused on artificial intelligence, autonomous agentic systems, cybersecurity research, and experimental full-stack engineering. 
 
