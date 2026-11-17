@@ -9,6 +9,7 @@
 
 ## ✦ System Overview
 
+
 **EON** is an immersive digital experience built with **Next.js (App Router)**, **React 18**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**. It embodies a monochromatic dark futuristic aesthetic with Japanese minimalism, atmospheric canvas particle systems, audio synthesis, live GitHub API integrations, and an intelligent context-aware personal assistant (**EON AI**).
 
 ---
